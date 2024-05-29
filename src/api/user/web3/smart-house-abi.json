@@ -1,0 +1,312 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "penaltyFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "EndRentWithPenalty",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_contractHash",
+        "type": "string"
+      }
+    ],
+    "name": "ExtendRentalRoom",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_invoiceHash",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "invoiceFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "PayForRent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_rentAmountPerMonth",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_depositAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "ReOpen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "depositAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentEnded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "renter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_contractHash",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_rentAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_deposit",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentStarted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_roomId",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetRoomForRent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address payable",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address payable",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "action",
+        "type": "string"
+      }
+    ],
+    "name": "TransferBalance",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" }
+    ],
+    "name": "endRent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" },
+      { "internalType": "uint256", "name": "penaltyFee", "type": "uint256" }
+    ],
+    "name": "endRentWithPenalty",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" },
+      { "internalType": "string", "name": "_contractHash", "type": "string" }
+    ],
+    "name": "extendRentalRoom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" },
+      { "internalType": "string", "name": "_invoiceHash", "type": "string" },
+      { "internalType": "uint256", "name": "invoiceFee", "type": "uint256" }
+    ],
+    "name": "payForRentByMonth",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "rentAmountPerMonth",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "depositAmount", "type": "uint256" }
+    ],
+    "name": "reOpenRoomForRent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "roomId",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "rooms",
+    "outputs": [
+      { "internalType": "string", "name": "contractHash", "type": "string" },
+      { "internalType": "string", "name": "invoiceHash", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "rentAmountPerMonth",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "depositAmount", "type": "uint256" },
+      { "internalType": "address payable", "name": "owner", "type": "address" },
+      {
+        "internalType": "address payable",
+        "name": "renter",
+        "type": "address"
+      },
+      { "internalType": "bool", "name": "signed", "type": "bool" },
+      { "internalType": "bool", "name": "forRent", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "rentAmountPerMonth",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "depositAmount", "type": "uint256" }
+    ],
+    "name": "setRoomForRent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_roomId", "type": "uint256" },
+      { "internalType": "string", "name": "_contractHash", "type": "string" }
+    ],
+    "name": "signByRenter",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address payable", "name": "from", "type": "address" },
+      { "internalType": "address payable", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "string", "name": "action", "type": "string" }
+    ],
+    "name": "transferBalance",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]

@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "es2020": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:node/recommended",
+        "standard"
+    ],
+    "overrides": [],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "semi": [
+            "error",
+            "always"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        // "indent": [
+        //     "warn",
+        //     2
+        // ],
+        "linebreak-style": [
+            "warn",
+            "unix"
+        ],
+        "object-property-newline": "off",
+        // override configuration set by extending "eslint:recommended"
+        "no-empty": "warn",
+        "no-cond-assign": [
+            "warn",
+            "always"
+        ], // disable rules from base configurations
+        "for-direction": "off",
+        "comma-dangle": [
+            "warn",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "never",
+                "exports": "never",
+                "functions": "never",
+            },
+        ],
+    }
+}
