@@ -106,7 +106,9 @@ class AuthService {
       const user = await User.findOne({
         $or: [{ username }, { email: username }, { phone: username }],
       })
-        .select("_id otp username name email phone auth avatar wallet wishList")
+        .select(
+          "_id otp username name email phone auth avatar wallet wishList address dob createdAt gender identity",
+        )
         .lean();
 
       if (!user) throw new Error("user not found!");
@@ -420,6 +422,8 @@ class AuthService {
     user.address.ward = address_entities?.ward?.toLowerCase() || "";
     user.address.street = address_entities?.street?.toLowerCase() || "";
     user.auth.isAuthorize = true;
+    // Add user avatar
+    user.avatar = `https://ui-avatars.com/api/?background=7A7878&color=E5A500&name=${name}`;
     await user.save();
 
     const payload = {
