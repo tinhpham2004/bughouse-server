@@ -27,7 +27,7 @@ const userValidate = {
     return regex.test(phone);
   },
 
-  validateUsername(username) {
+  validateUsername (username) {
     if (!username) { return false; }
     return true;
   },
@@ -73,19 +73,19 @@ const userValidate = {
   },
 
   // validate username and otp to corfirm account
-  validateConfirmAccount(username, otpPhone) {
+  validateConfirmAccount (username, otpPhone) {
     if (!this.validateUsername(username) || !this.validateOTP(otpPhone)) { throw new MyError("Info confirm account invalid"); }
   },
 
-  validateResetPassword(username, otpPhone, password) {
+  validateResetPassword (username, otpPhone, password) {
     if (
-      !this.validateUsername(username)
-      || !this.validateOTP(otpPhone)
-      || !this.validatePassword(password)
+      !this.validateUsername(username) ||
+      !this.validateOTP(otpPhone) ||
+      !this.validatePassword(password)
     ) { throw new Error("Info reset password invalid"); }
   },
 
-  validatePhonesList(phones) {
+  validatePhonesList (phones) {
     if (!phones || !Array.isArray(phones)) { throw new MyError("Phones invalid"); }
 
     phones.forEach((phoneEle) => {
@@ -94,9 +94,9 @@ const userValidate = {
     });
   },
 
-  async checkRegistryInfo(userInfo) {
+  async checkRegistryInfo (userInfo) {
     const {
-      username, password, contactInfo, email
+      username, password, contactInfo, email,
     } = userInfo;
     const error = {};
 
@@ -118,7 +118,7 @@ const userValidate = {
     if (!isEmpty(error)) error.toString();
 
     return {
-      username, password, contactInfo, error, email
+      username, password, contactInfo, error, email,
     };
   },
 

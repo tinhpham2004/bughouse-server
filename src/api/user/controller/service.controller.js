@@ -4,13 +4,12 @@ const demandService = require("../service/demand.service");
 
 class ServiceApartmentController {
   // [POST] /service/unit/create-unit
-  async createUnit(req, res, next) {
+  async createUnit (req, res, next) {
     try {
       const { errorCode, message, data } =
         await serviceApartmentService.createUnit(req.body);
 
-      if (!(errorCode && message && data))
-        throw new ArgumentError("Create unit ==>");
+      if (!(errorCode && message && data)) { throw new ArgumentError("Create unit ==>"); }
 
       return res.status(errorCode).json({
         errorCode,
@@ -21,8 +20,9 @@ class ServiceApartmentController {
       next(error);
     }
   }
-  //[PUT] /service/service-demand
-  async updateServiceDemand(req, res, next) {
+
+  // [PUT] /service/service-demand
+  async updateServiceDemand (req, res, next) {
     try {
       const { roomId, demandInfo } = req.body;
 
@@ -39,14 +39,14 @@ class ServiceApartmentController {
       next(error);
     }
   }
+
   // [GET] /service/unit
-  async getAllUnit(req, res, next) {
+  async getAllUnit (req, res, next) {
     try {
       const { errorCode, message, data } =
         await serviceApartmentService.getAllUnit();
 
-      if (!(errorCode && message && data))
-        throw new ArgumentError("Get all unit ==>");
+      if (!(errorCode && message && data)) { throw new ArgumentError("Get all unit ==>"); }
 
       return res.status(errorCode).json({
         errorCode,
@@ -58,8 +58,8 @@ class ServiceApartmentController {
     }
   }
 
-  //[GET] /service/:roomId/service-demand
-  async getServiceDemand(req, res, next) {
+  // [GET] /service/:roomId/service-demand
+  async getServiceDemand (req, res, next) {
     try {
       const atMonth = new Date();
       const roomId = req.params.roomId;

@@ -107,7 +107,7 @@ router.post("/login", authController.login);
  *                 type: string
  *               contactInfo:
  *                 type: string
- *               email: 
+ *               email:
  *                  type: string
  *             example:
  *               username: canhcutcon
@@ -404,5 +404,3 @@ router.get("/verify-email/:token", authController.verifyEmail);
 router.put("/verify-info", authController.verifyInfoUser);
 
 module.exports = router;
-
-

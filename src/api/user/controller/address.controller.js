@@ -2,7 +2,7 @@ const addressService = require("../service/address.service");
 
 class AddressController {
   // [GET] bh/address/ditricts
-  async getDistrict(req, res, next) {
+  async getDistrict (req, res, next) {
     try {
       const listDistrict = await addressService.getDistrictsFromDatabase();
       return res.status(200).json({
@@ -15,7 +15,7 @@ class AddressController {
     }
   }
 
-  async getDistrictDetail(req, res, next) {
+  async getDistrictDetail (req, res, next) {
     try {
       const districtName = req.params.districtName;
       const data = addressService.getEntitiesByDistrict(districtName);
@@ -35,7 +35,7 @@ class AddressController {
   }
 
   // [GET] bh/address/wards/:districtName
-  async getWard(req, res, next) {
+  async getWard (req, res, next) {
     try {
       const districtName = req.params.districtName;
       const groupedData = await addressService.getEntitiesByDistrict(
@@ -63,7 +63,7 @@ class AddressController {
   }
 
   // [GET] bh/address/streets/:districtName
-  async getStreet(req, res, next) {
+  async getStreet (req, res, next) {
     try {
       const districtName = req.params.districtName;
       const groupedData = await addressService.getEntitiesByDistrict(

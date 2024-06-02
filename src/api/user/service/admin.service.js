@@ -1,8 +1,7 @@
 class AdminService {
-
-    async createRentalHouseContract() {
-        // if(!)
-    }
-};
+  async createRentalHouseContract () {
+    // if(!)
+  }
+}
 
 module.exports = new AdminService();

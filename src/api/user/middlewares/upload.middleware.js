@@ -19,7 +19,7 @@ const TYPE_MATCH = [
 const FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE);
 
 const storage = multer.memoryStorage({
-  destination(req, res, callback) {
+  destination (req, res, callback) {
     callback(null, "");
   },
 });
@@ -51,11 +51,11 @@ const uploadManyFiles = multer({
 const uploadFile = multer({
   storage,
   limits: { fileSize: FILE_SIZE },
-  fileFilter(req, file, cb) {
+  fileFilter (req, file, cb) {
     checkFileType(file, cb);
   },
 }).single(
-  "file",
+  "file"
 );
 
 const multipleUploadMiddleware = util.promisify(uploadManyFiles);

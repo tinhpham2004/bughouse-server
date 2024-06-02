@@ -9,8 +9,7 @@
 
 const socket = (io) => {
   io.on("connect", (socket) => {
-    socket.on("disconnect", () => {
-    });
+    socket.on("disconnect", () => {});
 
     socket.on("join", (userId) => {
       socket.userId = userId;

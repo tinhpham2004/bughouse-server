@@ -7,7 +7,7 @@ const validateAddress = require("../validate/address.validate");
 const User = require("../../../model/user/user.model");
 const NotFoundError = require("../../../exception/NotFoundError");
 const rentalContract = require("../blockchain/deploy/BHRentalContract");
-const {compare} = require("../../../utils/object.helper");
+const { compare } = require("../../../utils/object.helper");
 const FeedBack = require("../../../model/user/feedback.model");
 const ReportRoom = require("../../../model/user/report.model");
 const Contract = require("../../../model/transaction/contract.model");
@@ -15,14 +15,13 @@ const demandService = require("./demand.service");
 const invoiceService = require("./invoice.service");
 const CREATE_ROOM_FEE = 5000;
 class RoomService {
-  async createRoom(_id, roomInfo) {
+  async createRoom (_id, roomInfo) {
     // set owner
     const userOwner = await User.getById(_id);
     if (!userOwner) throw new NotFoundError("room servce=> not found user");
-    if (userOwner?.wallet.balance < CREATE_ROOM_FEE)
-      throw new MyError("bạn không đủ tiền để tạo phòng!");
+    if (userOwner?.wallet.balance < CREATE_ROOM_FEE) { throw new MyError("bạn không đủ tiền để tạo phòng!"); }
 
-    let room = await roomValidate.validCreateRoom(_id, roomInfo);
+    const room = await roomValidate.validCreateRoom(_id, roomInfo);
     const {
       amentilities,
       services,
@@ -46,8 +45,7 @@ class RoomService {
 
     if (!address) throw new MyError("room service ==>  address invalid!");
 
-    if (!amentilities || !services)
-      throw new ArgumentError("room service ==> missing parameter");
+    if (!amentilities || !services) { throw new ArgumentError("room service ==> missing parameter"); }
 
     room.owner = userOwner._id;
     // //set unity
@@ -75,7 +73,7 @@ class RoomService {
     };
   }
 
-  async reOpenRoom(ownerId, roomInfo) {
+  async reOpenRoom (ownerId, roomInfo) {
     const user = await User.getById(ownerId);
 
     if (!roomInfo) throw new MyError("missing parameter => re-openRoom");
@@ -104,7 +102,7 @@ class RoomService {
     };
   }
 
-  async getAllRoom(
+  async getAllRoom (
     conditions = {},
     pagination,
     projection,
@@ -154,7 +152,7 @@ class RoomService {
     };
   }
 
-  async getOneRoom(roomId) {
+  async getOneRoom (roomId) {
     const roomPineline = [
       {
         path: "owner",
@@ -171,7 +169,7 @@ class RoomService {
     return room;
   }
 
-  async getRoomFeedBack(conditions = {}, pagination) {
+  async getRoomFeedBack (conditions = {}, pagination) {
     const { limit, page, skip } = pagination;
     const [items, total] = await Promise.all([
       FeedBack.find(conditions)
@@ -200,7 +198,7 @@ class RoomService {
     };
   }
 
-  async getRoomReport(conditions = {}, pagination) {
+  async getRoomReport (conditions = {}, pagination) {
     const { limit, page, skip } = pagination;
     const [items, total] = await Promise.all([
       ReportRoom.find(conditions)
@@ -229,16 +227,17 @@ class RoomService {
     };
   }
 
-  async updateRoom(roomId, data) {
+  async updateRoom (roomId, data) {
     const { status } = Room.findById(roomId).projection({ status: 1 });
-    if (status === "already-rent")
+    if (status === "already-rent") {
       throw new MyError(
         "the room is still rented, can not edit the information"
       );
+    }
     return Room.findByIdAndUpdate(roomId, data, { new: true });
   }
 
-  async checkUpdateServiceDemand(roomId) {
+  async checkUpdateServiceDemand (roomId) {
     if (!roomId) throw new MyError("missing parameter!");
     const date = new Date();
     const { demandAt } = await Room.findById(roomId, { demandAt: 1 }).lean();
@@ -246,7 +245,7 @@ class RoomService {
     return true;
   }
 
-  async autoCreateInvoice(contract) {
+  async autoCreateInvoice (contract) {
     const updateDemand = await this.checkUpdateServiceDemand(
       contract?.room._id
     );
@@ -296,16 +295,15 @@ class RoomService {
   }
 
   // Helper method to verify user and balance
-  async verifyUserAndBalance(userId) {
+  async verifyUserAndBalance (userId) {
     const user = await User.getById(userId);
     if (!user) throw new NotFoundError("User not found");
-    if (user?.wallet.balance < CREATE_ROOM_FEE)
-      throw new MyError("Insufficient balance to create room");
+    if (user?.wallet.balance < CREATE_ROOM_FEE) { throw new MyError("Insufficient balance to create room"); }
     return user;
   }
 
   // Helper method to validate and create a room
-  async validateAndCreateRoom(_id, roomInfo, userOwner) {
+  async validateAndCreateRoom (_id, roomInfo, userOwner) {
     // ... validateAndCreateRoom implementation ...
   }
 }

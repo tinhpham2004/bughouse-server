@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const contractController = require('../controller/contract.controller');
+const router = require("express").Router();
+const contractController = require("../controller/contract.controller");
 
 /**
  * @swagger
@@ -33,7 +33,7 @@ const contractController = require('../controller/contract.controller');
  *                 description: The price of the contract
  *               dateRent:
  *                 type: date-time
- *                 description: the day create contract 
+ *                 description: the day create contract
  *               payTime:
  *                 type: date-time
  *                 description: the day pay for contract
@@ -79,7 +79,7 @@ const contractController = require('../controller/contract.controller');
  *                       description: The ID of the room
  *                     dateRent:
  *                       type: date-time
- *                       description: the day create contract 
+ *                       description: the day create contract
  *                     payment:
  *                       type: number
  *                       description: The price of the contract
@@ -114,7 +114,7 @@ const contractController = require('../controller/contract.controller');
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.post('/create-contract', contractController.createContract);
-router.post('/sign-by-renter', contractController.signByRenter);
+router.post("/create-contract", contractController.createContract);
+router.post("/sign-by-renter", contractController.signByRenter);
 
-module.exports = router; 
+module.exports = router;

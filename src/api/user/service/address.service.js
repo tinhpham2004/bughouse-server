@@ -6,7 +6,7 @@ const chain = require("../../../model/chain");
 const { VIETNAM_DATASET_URL } = process.env;
 
 class AddressService {
-  fetchCityData() {
+  fetchCityData () {
     try {
       const response = require("../../../../database-view/address.json");
       return response;
@@ -15,13 +15,13 @@ class AddressService {
     }
   }
 
-  async getDistrictList() {
+  async getDistrictList () {
     const cityData = await this.fetchCityData();
 
     return cityData.district.map(({ name, pre }) => ({ name, pre }));
   }
 
-  async getEntitiesByDistrict(districtName, entityType) {
+  async getEntitiesByDistrict (districtName, entityType) {
     const cityData = this.fetchCityData();
     const groupedData = {};
 
@@ -35,24 +35,24 @@ class AddressService {
     return groupedData;
   }
 
-  async getWardsByDistrict(districtName) {
+  async getWardsByDistrict (districtName) {
     return await this.getEntitiesByDistrict(districtName, "ward");
   }
 
-  async getStreetsByDistrict(districtName) {
+  async getStreetsByDistrict (districtName) {
     return await this.getEntitiesByDistrict(districtName, "street");
   }
 
-  async getDistrictsFromDatabase() {
+  async getDistrictsFromDatabase () {
     const districts = (await this.fetchCityData()).district.map((d) => d.name);
     return districts;
   }
 
-  async getWardsFromDatabase(districtName) {
+  async getWardsFromDatabase (districtName) {
     return await this.getWardsByDistrict(districtName);
   }
 
-  async getStreetsFromDatabase(districtName) {
+  async getStreetsFromDatabase (districtName) {
     return await this.getStreetsByDistrict(districtName);
   }
 }

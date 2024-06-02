@@ -28,9 +28,9 @@ const roomService = require("../service/room.service");
 const Web3 = require("web3");
 
 const sortObject = (obj) => {
-  var sorted = {};
-  var str = [];
-  var key;
+  const sorted = {};
+  const str = [];
+  let key;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) {
       str.push(encodeURIComponent(key));
@@ -44,12 +44,12 @@ const sortObject = (obj) => {
 };
 
 class UserController {
-  constructor(io) {
+  constructor (io) {
     this.io = io;
   }
 
-  //[POST] user/wallet-connect
-  async connectVNpaytoWallet(req, res, next) {
+  // [POST] user/wallet-connect
+  async connectVNpaytoWallet (req, res, next) {
     try {
       const { walletAddress, amount } = req.body;
 
@@ -71,7 +71,7 @@ class UserController {
       console.log("🚀 ~ UserController ~ connectVNpaytoWallet ~ user:", user);
 
       const tmnCode = vnp_TmnCode;
-      let secretKey = vnp_HashSecret;
+      const secretKey = vnp_HashSecret;
       let vnpUrl = vnp_Url;
       const returnUrl = vnp_ReturnUrl;
 
@@ -92,29 +92,29 @@ class UserController {
       const currCode = "VND";
 
       let vnp_Params = {};
-      vnp_Params["vnp_Version"] = "2.1.0";
-      vnp_Params["vnp_Command"] = "pay";
-      vnp_Params["vnp_TmnCode"] = tmnCode;
-      vnp_Params["vnp_Locale"] = locale;
-      vnp_Params["vnp_CurrCode"] = currCode;
-      vnp_Params["vnp_TxnRef"] = user._id + new Date();
-      vnp_Params["vnp_OrderInfo"] = user._id;
-      vnp_Params["vnp_OrderType"] = orderType;
-      vnp_Params["vnp_Amount"] = amount * 100;
-      vnp_Params["vnp_ReturnUrl"] = returnUrl;
-      vnp_Params["vnp_IpAddr"] = ipAddr;
-      vnp_Params["vnp_CreateDate"] = createDate;
+      vnp_Params.vnp_Version = "2.1.0";
+      vnp_Params.vnp_Command = "pay";
+      vnp_Params.vnp_TmnCode = tmnCode;
+      vnp_Params.vnp_Locale = locale;
+      vnp_Params.vnp_CurrCode = currCode;
+      vnp_Params.vnp_TxnRef = user._id + new Date();
+      vnp_Params.vnp_OrderInfo = user._id;
+      vnp_Params.vnp_OrderType = orderType;
+      vnp_Params.vnp_Amount = amount * 100;
+      vnp_Params.vnp_ReturnUrl = returnUrl;
+      vnp_Params.vnp_IpAddr = ipAddr;
+      vnp_Params.vnp_CreateDate = createDate;
       if (bankCode !== null && bankCode !== "") {
-        vnp_Params["vnp_BankCode"] = bankCode;
+        vnp_Params.vnp_BankCode = bankCode;
       }
 
       vnp_Params = sortObject(vnp_Params);
       const querystring = require("qs");
-      let signData = querystring.stringify(vnp_Params, { encode: false });
+      const signData = querystring.stringify(vnp_Params, { encode: false });
       const crypto = require("crypto");
       const hmac = crypto.createHmac("sha512", secretKey);
       const signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-      vnp_Params["vnp_SecureHash"] = signed;
+      vnp_Params.vnp_SecureHash = signed;
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
       return res.json({ paymentUrl: vnpUrl });
@@ -122,8 +122,9 @@ class UserController {
       next(error);
     }
   }
-  //[POST] user/wallet-withdraw
-  async withdrawMoney(req, res, next) {
+
+  // [POST] user/wallet-withdraw
+  async withdrawMoney (req, res, next) {
     try {
       const { userId } = req.auth;
       const { amount } = req.body;
@@ -147,7 +148,7 @@ class UserController {
   }
 
   // [POST] user/contract/:contractId/cancel-by-renter
-  async cancelByRenter(req, res, next) {
+  async cancelByRenter (req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -166,8 +167,8 @@ class UserController {
     }
   }
 
-  //[POST] user/contract/accept
-  async acceptRequest(req, res, next) {
+  // [POST] user/contract/accept
+  async acceptRequest (req, res, next) {
     try {
       const { userId } = req.auth;
       const requestId = req.params.requestId;
@@ -184,7 +185,7 @@ class UserController {
     }
   }
 
-  async confirmPayment(req, res, next) {
+  async confirmPayment (req, res, next) {
     try {
       let vnp_Params = req.query;
       console.log(
@@ -192,11 +193,11 @@ class UserController {
         req.query
       );
 
-      const secureHash = vnp_Params["vnp_SecureHash"];
-      delete vnp_Params["vnp_SecureHash"];
-      delete vnp_Params["vnp_SecureHashType"];
-      const amount = vnp_Params["vnp_Amount"];
-      const userId = vnp_Params["vnp_OrderInfo"];
+      const secureHash = vnp_Params.vnp_SecureHash;
+      delete vnp_Params.vnp_SecureHash;
+      delete vnp_Params.vnp_SecureHashType;
+      const amount = vnp_Params.vnp_Amount;
+      const userId = vnp_Params.vnp_OrderInfo;
 
       const data = await userWalletService.changeBalance(
         userId,
@@ -219,20 +220,20 @@ class UserController {
       });
 
       vnp_Params = sortObject(vnp_Params);
-      let secretKey = vnp_HashSecret;
+      const secretKey = vnp_HashSecret;
 
       const querystring = require("qs");
       const crypto = require("crypto");
       const signData = querystring.stringify(vnp_Params, { encode: false });
       const hmac = crypto.createHmac("sha512", secretKey);
-      const url = `http://localhost:3000/bh/payment-confirmation`;
+      const url = "http://localhost:3000/bh/payment-confirmation";
       res.redirect(301, url);
     } catch (error) {
       next(error);
     }
   }
 
-  async testPayment(req, res, next) {
+  async testPayment (req, res, next) {
     try {
       console.log("test pay ment");
       const from = await User.getById(ADMIN._id);
@@ -258,8 +259,9 @@ class UserController {
       next(error);
     }
   }
+
   // [GET] /user/me/profile
-  async getProfile(req, res, next) {
+  async getProfile (req, res, next) {
     const id = req.auth.userId;
     try {
       const user = await userService.getProfile(id);
@@ -287,7 +289,7 @@ class UserController {
   }
 
   // [GET] /user/me/wallet
-  async getWallet(req, res, next) {
+  async getWallet (req, res, next) {
     const id = req.auth.userId;
     try {
       const wallet = await userWalletService.getBalance(id);
@@ -307,7 +309,7 @@ class UserController {
   }
 
   // [GET] /user/me/transaction-history
-  async getTransactionHistory(req, res, next) {
+  async getTransactionHistory (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -344,7 +346,7 @@ class UserController {
   }
 
   // [GET] /user/notifications
-  async getNotification(req, res, next) {
+  async getNotification (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -373,8 +375,8 @@ class UserController {
     }
   }
 
-  //[PUT] /user/notifications/:notificationId
-  async checkNotification(req, res, next) {
+  // [PUT] /user/notifications/:notificationId
+  async checkNotification (req, res, next) {
     try {
       const notificationId = req.params.notificationId;
 
@@ -390,8 +392,8 @@ class UserController {
     }
   }
 
-  //[GET] /users/contract/rented
-  async getContractRented(req, res, next) {
+  // [GET] /users/contract/rented
+  async getContractRented (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -414,8 +416,8 @@ class UserController {
     }
   }
 
-  //[GET] /users/contract/leased
-  async getContractLeased(req, res, next) {
+  // [GET] /users/contract/leased
+  async getContractLeased (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -452,8 +454,8 @@ class UserController {
     }
   }
 
-  //[GET] /users/contract/:roomId
-  async getContractOfRoom(req, res, next) {
+  // [GET] /users/contract/:roomId
+  async getContractOfRoom (req, res, next) {
     try {
       const { roomId } = req.params;
       console.log("gau gau");
@@ -486,7 +488,7 @@ class UserController {
   }
 
   // [PUT] /bh/user/me/profile
-  async updateProfile(req, res, next) {
+  async updateProfile (req, res, next) {
     const userId = req.auth.userId;
     const { name, dob, sex, id, identityImg, home, address_entities } =
       req.body;
@@ -512,7 +514,7 @@ class UserController {
   }
 
   // [PATCH] /bh/user/me/avatar
-  async changeAvatar(req, res, next) {
+  async changeAvatar (req, res, next) {
     try {
       upload(req, res, async (err) => {
         const { file } = req;
@@ -528,8 +530,8 @@ class UserController {
     } catch (error) {}
   }
 
-  //[GET] /users/requests
-  async getUserRequest(req, res, next) {
+  // [GET] /users/requests
+  async getUserRequest (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -550,8 +552,8 @@ class UserController {
     }
   }
 
-  //[GET] /users/invoices/rented
-  async getAllInvoiceRenter(req, res, next) {
+  // [GET] /users/invoices/rented
+  async getAllInvoiceRenter (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -574,8 +576,9 @@ class UserController {
       next(error);
     }
   }
-  //[GET] /users/invoices/leased
-  async getAllInvoiceOwner(req, res, next) {
+
+  // [GET] /users/invoices/leased
+  async getAllInvoiceOwner (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -601,8 +604,8 @@ class UserController {
     }
   }
 
-  //[GET] /users/invoices/:invoiceId
-  async getInvoiceById(req, res, next) {
+  // [GET] /users/invoices/:invoiceId
+  async getInvoiceById (req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -622,8 +625,9 @@ class UserController {
       next(error);
     }
   }
-  //[POST]/users/:contractId/cancel-by-renter
-  async sendRequestToCancel(req, res, next) {
+
+  // [POST]/users/:contractId/cancel-by-renter
+  async sendRequestToCancel (req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -638,8 +642,9 @@ class UserController {
       next(error);
     }
   }
-  //[POST]/users/:contractId/extend-by-renter
-  async sendRequestToExtend(req, res, next) {
+
+  // [POST]/users/:contractId/extend-by-renter
+  async sendRequestToExtend (req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -659,8 +664,8 @@ class UserController {
     }
   }
 
-  //[POST]/users/contract/accept-extend/:requestId
-  async acceptRequestExtendContract(req, res, next) {
+  // [POST]/users/contract/accept-extend/:requestId
+  async acceptRequestExtendContract (req, res, next) {
     try {
       const { userId } = req.auth;
       const requestId = req.params.requestId;
@@ -678,7 +683,7 @@ class UserController {
   }
 
   // [POST] /user/accept-cancel-rental
-  async acceptCancelRental(req, res, next) {
+  async acceptCancelRental (req, res, next) {
     try {
       const { userId } = req.auth;
 
@@ -694,8 +699,8 @@ class UserController {
     }
   }
 
-  //[POST] /users/:contractId/cancel-by-lessor
-  async cancelContractByLessor(req, res, next) {
+  // [POST] /users/:contractId/cancel-by-lessor
+  async cancelContractByLessor (req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -711,8 +716,8 @@ class UserController {
     }
   }
 
-  //[POST] /room/:roomId/feedback
-  async feedBackRoom(req, res, next) {
+  // [POST] /room/:roomId/feedback
+  async feedBackRoom (req, res, next) {
     try {
       const { roomId } = req.params;
       const { userId } = req.auth;
@@ -734,8 +739,8 @@ class UserController {
     }
   }
 
-  //[POST] /room/:roomId/report
-  async reportRoom(req, res, next) {
+  // [POST] /room/:roomId/report
+  async reportRoom (req, res, next) {
     try {
       const { roomId } = req.params;
       const { userId } = req.auth;

@@ -4,8 +4,8 @@ const RentalContract = require("../blockchain/deploy/BHRentalContract");
 const contractService = require("../service/contract.service");
 
 class ContractController {
-  //[POST] bh/contract/create-contract
-  async createContract(req, res, next) {
+  // [POST] bh/contract/create-contract
+  async createContract (req, res, next) {
     try {
       // owner id
       const { userId } = req.auth;
@@ -29,8 +29,9 @@ class ContractController {
       next(error);
     }
   }
-  //[POST] bh/contract/sign-by-renter
-  async signByRenter(req, res, next) {
+
+  // [POST] bh/contract/sign-by-renter
+  async signByRenter (req, res, next) {
     try {
       const { userId } = req.auth;
       const { roomId, contractHash } = req.body;
@@ -49,8 +50,9 @@ class ContractController {
       next(error);
     }
   }
+
   // [GET] bh/contract/:renterId
-  async getContractByRenter(req, res, next) {
+  async getContractByRenter (req, res, next) {
     try {
       const { data } = await contractService.getContractByRenter(
         req.params.renterId

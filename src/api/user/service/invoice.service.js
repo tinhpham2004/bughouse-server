@@ -16,9 +16,8 @@ const Request = require("../../../model/user/request.model");
 const ServiceDemand = require("../../../model/service/service-demand.model");
 const { compare } = require("../../../utils/object.helper");
 class InvoiceService {
-  async createInvoice(userId, contractId, invoiceInfo) {
-    if (!(contractId && invoiceInfo && userId))
-      throw new ArgumentError("invoice service ==>");
+  async createInvoice (userId, contractId, invoiceInfo) {
+    if (!(contractId && invoiceInfo && userId)) { throw new ArgumentError("invoice service ==>"); }
 
     const contract = await Contract.getOne(contractId);
 
@@ -27,8 +26,8 @@ class InvoiceService {
     // if (userId !== lessor._id)
     //     throw new MyError('Unauthorize to create invoices');
 
-    let paymentDay = this.checkDueInvoiceDay(dateRent, new Date(), period);
-    let endDate = new Date(paymentDay.getTime() + 2 * 24 * 60 * 60 * 1000);
+    const paymentDay = this.checkDueInvoiceDay(dateRent, new Date(), period);
+    const endDate = new Date(paymentDay.getTime() + 2 * 24 * 60 * 60 * 1000);
 
     const serviceDemands = invoiceInfo.listServiceDemands;
     if (!serviceDemands || !serviceDemands.length) {
@@ -44,7 +43,7 @@ class InvoiceService {
       amountDemand
     );
 
-    let invoice = await Invoice.create({
+    const invoice = await Invoice.create({
       contract: contract._id,
       creationDate: paymentDay,
       payStatus: "Pending",
@@ -72,8 +71,8 @@ class InvoiceService {
     };
   }
 
-  async getAll(conditions = {}, pagination, projection = {}) {
-    let { payStatus, userId } = conditions;
+  async getAll (conditions = {}, pagination, projection = {}) {
+    const { payStatus, userId } = conditions;
     const { limit, page, skip } = pagination;
     const filter = {
       ...(payStatus && { payStatus }),
@@ -120,8 +119,8 @@ class InvoiceService {
     };
   }
 
-  async getOne(conditions) {
-    let { payStatus, invoiceId } = conditions;
+  async getOne (conditions) {
+    const { payStatus, invoiceId } = conditions;
     const filter = {
       ...(invoiceId && { _id: invoiceId }),
       ...(payStatus && { payStatus }),
@@ -152,17 +151,15 @@ class InvoiceService {
     return invoice;
   }
 
-  checkDueInvoiceDay(dateRent, paymentDay, period) {
-    if (!(dateRent && paymentDay))
-      throw new ArgumentError("invoice service ==> date rent, payment day ");
+  checkDueInvoiceDay (dateRent, paymentDay, period) {
+    if (!(dateRent && paymentDay)) { throw new ArgumentError("invoice service ==> date rent, payment day "); }
 
-    if (InvoiceValidate.checkDateRentExpired(dateRent, paymentDay, period))
-      throw new MyError("Period of contract has expired!");
+    if (InvoiceValidate.checkDateRentExpired(dateRent, paymentDay, period)) { throw new MyError("Period of contract has expired!"); }
 
     return paymentDay;
   }
 
-  async payForRentEachMonth(renterId, invoiceId) {
+  async payForRentEachMonth (renterId, invoiceId) {
     // get renter info
     const renter = await User.getById(renterId);
     // get invoice info { contract, amount, startDate, endDate }
@@ -173,8 +170,7 @@ class InvoiceService {
       status: "already-rent",
     });
 
-    if (compare(renter._id, room.owner))
-      throw new MyError("chỉ có người thuê mới được thanh toán!");
+    if (compare(renter._id, room.owner)) { throw new MyError("chỉ có người thuê mới được thanh toán!"); }
 
     if (!room) throw new MyError("room not found");
     // check date to pay
@@ -184,9 +180,8 @@ class InvoiceService {
 
     const rentAmount = room.basePrice;
     const invoiceFee = invoice.amount + penaltyFee - rentAmount;
-    
-    if(renter.wallet.balance < invoice.amount)       
-      throw new MyError("không đủ tiền thanh toán hóa đơn!");
+
+    if (renter.wallet.balance < invoice.amount) { throw new MyError("không đủ tiền thanh toán hóa đơn!"); }
 
     const data = await RentalContract.payForRentMonth(
       renter.wallet.walletAddress,
@@ -199,7 +194,7 @@ class InvoiceService {
     return data;
   }
 
-  async extendsPaymentDayInvoice(renterId, invoiceId) {
+  async extendsPaymentDayInvoice (renterId, invoiceId) {
     // get renter info
     const renter = await User.getById(renterId);
     const invoice = await Invoice.findOne({

@@ -3,9 +3,9 @@ const UserController = require("../controller/user.controller");
 const swaggerJSDoc = require("swagger-jsdoc");
 const test = require("../edotor");
 const userRouter = (io) => {
-    const userController = new UserController(io);
-    // userController.connectVNpaytoWallet
-    /**
+  const userController = new UserController(io);
+  // userController.connectVNpaytoWallet
+  /**
      * @swagger
      * /users/wallet-connect:
      *   post:
@@ -57,33 +57,33 @@ const userRouter = (io) => {
      *                   type: object
      *                   example: {}
      */
-    router.post("/wallet-connect", userController.connectVNpaytoWallet);
-    router.post("/wallet-withdraw", userController.withdrawMoney);
-    router.get("/me/transaction-history", userController.getTransactionHistory);
-    router.get("/me/wallet", userController.getWallet);
+  router.post("/wallet-connect", userController.connectVNpaytoWallet);
+  router.post("/wallet-withdraw", userController.withdrawMoney);
+  router.get("/me/transaction-history", userController.getTransactionHistory);
+  router.get("/me/wallet", userController.getWallet);
 
-    router.get("/notifications", userController.getNotification);
-    router.put("/notifications/:notificationId", userController.checkNotification);
-    router.get("/requests", userController.getUserRequest);
+  router.get("/notifications", userController.getNotification);
+  router.put("/notifications/:notificationId", userController.checkNotification);
+  router.get("/requests", userController.getUserRequest);
 
-    router.get("/invoices/rented", userController.getAllInvoiceRenter);
-    router.get("/invoices/leased", userController.getAllInvoiceOwner);
-    router.get("/invoices/:invoiceId", userController.getInvoiceById);
+  router.get("/invoices/rented", userController.getAllInvoiceRenter);
+  router.get("/invoices/leased", userController.getAllInvoiceOwner);
+  router.get("/invoices/:invoiceId", userController.getInvoiceById);
 
-    router.post("/contract/:contractId/cancel-by-renter", userController.cancelByRenter);
-    router.post("/contract/:contractId/cancel-by-lessor", userController.cancelContractByLessor);
-    router.post("/contract/:contractId/extend-by-renter", userController.sendRequestToExtend);
-    router.post("/contract/accept/:requestId", userController.acceptRequest);
-    router.post("/contract/accept-extend/:requestId", userController.acceptRequestExtendContract);
-    router.post("/payment-test", userController.testPayment);
-    router.get("/contract/:roomId", userController.getContractOfRoom);
+  router.post("/contract/:contractId/cancel-by-renter", userController.cancelByRenter);
+  router.post("/contract/:contractId/cancel-by-lessor", userController.cancelContractByLessor);
+  router.post("/contract/:contractId/extend-by-renter", userController.sendRequestToExtend);
+  router.post("/contract/accept/:requestId", userController.acceptRequest);
+  router.post("/contract/accept-extend/:requestId", userController.acceptRequestExtendContract);
+  router.post("/payment-test", userController.testPayment);
+  router.get("/contract/:roomId", userController.getContractOfRoom);
 
-    router.post("/room/:roomId/feedback", userController.feedBackRoom);
-    router.post("/room/:roomId/report", userController.reportRoom);
+  router.post("/room/:roomId/feedback", userController.feedBackRoom);
+  router.post("/room/:roomId/report", userController.reportRoom);
 
-    router.get("/me/profile", userController.getProfile); // not yet
-    router.patch("/me/avatar", userController.changeAvatar); // not yet
-    return router;
+  router.get("/me/profile", userController.getProfile); // not yet
+  router.patch("/me/avatar", userController.changeAvatar); // not yet
+  return router;
 };
 
 module.exports = userRouter;

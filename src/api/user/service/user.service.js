@@ -28,7 +28,7 @@ const FeedBack = require("../../../model/user/feedback.model");
 const ReportRoom = require("../../../model/user/report.model");
 
 class UserService {
-  checkImage(file) {
+  checkImage (file) {
     const { mimetype } = file;
 
     if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
@@ -36,7 +36,7 @@ class UserService {
     }
   }
 
-  async cityData() {
+  async cityData () {
     const listDitrict = await addressService.getDitrictsFromDatabase();
     const city = await City.findOne({ _id: "6415ee77cc372ede59b64c1a" });
 
@@ -56,7 +56,7 @@ class UserService {
   }
 
   // [GET] /bh/user/me/profile
-  async getProfile(_id) {
+  async getProfile (_id) {
     await tokens.save();
     const user = await User.findById(_id, { auth: 0 })
       .select("-updateAt")
@@ -70,7 +70,7 @@ class UserService {
     return user;
   }
 
-  async updateProfile(_id, profile) {
+  async updateProfile (_id, profile) {
     if (!profile) {
       throw new Error("Profile in valid!");
     }
@@ -78,11 +78,10 @@ class UserService {
     const validProfile = await userValidate.validateProfile(_id, profile);
     const modifieUser = await User.updateOne({ _id }, { ...validProfile });
 
-    if (modifieUser.modifiedCount < 1)
-      throw new Error("Update user data fail!");
+    if (modifieUser.modifiedCount < 1) { throw new Error("Update user data fail!"); }
   }
 
-  async changeAvatar(_id, file) {
+  async changeAvatar (_id, file) {
     this.checkImage(file);
 
     const user = User.getById(_id);
@@ -106,7 +105,7 @@ class UserService {
     return user;
   }
 
-  async cancelRentalByRenter(renterId, contractId) {
+  async cancelRentalByRenter (renterId, contractId) {
     const renter = await User.getById(renterId);
 
     const contract = await Contract.findOne({
@@ -134,7 +133,7 @@ class UserService {
     };
   }
 
-  async extendRentalByRenter(renterId, contractId, newPeriod) {
+  async extendRentalByRenter (renterId, contractId, newPeriod) {
     const renter = await User.getById(renterId);
 
     const contract = await Contract.findOne({
@@ -146,7 +145,7 @@ class UserService {
     const notification = await Notification.create({
       user: ADMIN._id,
       type: "CONTINUE_RENTAL",
-      content: `extend rent room`,
+      content: "extend rent room",
       tag: [renter._id, contract.lessor],
     });
 
@@ -171,7 +170,7 @@ class UserService {
     };
   }
 
-  async extendContract(requestId) {
+  async extendContract (requestId) {
     const request = await Request.findOne({
       _id: requestId,
     });
@@ -190,7 +189,7 @@ class UserService {
     return result;
   }
 
-  async acceptCancelRentalRoom(ownerId, requestId) {
+  async acceptCancelRentalRoom (ownerId, requestId) {
     const request = await Request.findOne({
       _id: requestId,
     });
@@ -198,7 +197,7 @@ class UserService {
     const { data } = request;
 
     if (!request) throw new MyError("request not found");
-    //check contract due
+    // check contract due
     const dateEnd = new Date();
     // in due
     const inDue = await contractService.checkContractStatus(dateEnd, data._id);
@@ -221,7 +220,7 @@ class UserService {
     return result;
   }
 
-  async cancelContractByLessor(ownerId, contractId) {
+  async cancelContractByLessor (ownerId, contractId) {
     const contract = await Contract.findOne({
       _id: contractId,
       status: "available",
@@ -243,7 +242,7 @@ class UserService {
 
     const { renter, lessor, room, penaltyFeeEndRent } = contract;
 
-    //check contract due
+    // check contract due
     const dateEnd = new Date();
     // in due
     const inDue = await contractService.checkContractStatus(
@@ -281,15 +280,14 @@ class UserService {
     };
   }
 
-  async transferBalance(fromUserId, toUserId, amount, action) {
+  async transferBalance (fromUserId, toUserId, amount, action) {
     const from = await User.getById(fromUserId);
     const to = await User.getById(toUserId);
     console.log("🚀 ~ UserService ~ transferBalance ~ to:", to);
 
     if (amount < 0) throw new MyError("amount not invalid!");
 
-    if (compare(from._id, to._id))
-      throw new MyError("can not transfer for self");
+    if (compare(from._id, to._id)) { throw new MyError("can not transfer for self"); }
     const result = await RentalContract.transferBalance(
       from?.wallet?.walletAddress,
       to?.wallet?.walletAddress,
@@ -299,7 +297,7 @@ class UserService {
     return result;
   }
 
-  async withdrawMoney(userId, amount) {
+  async withdrawMoney (userId, amount) {
     if (!userId || amount < 0) throw new MyError("missing parameter");
 
     const { _id, wallet } = await User.findOne({ _id: toObjectId(userId) });
@@ -322,7 +320,7 @@ class UserService {
     return { notification };
   }
 
-  async feedBackRoom(roomId, userId, data) {
+  async feedBackRoom (roomId, userId, data) {
     /**
      * Flow:
      * 1. check user has rented room
@@ -366,7 +364,7 @@ class UserService {
     };
   }
 
-  async reportRoom(roomId, userId, data) {
+  async reportRoom (roomId, userId, data) {
     /**
      * Flow:
      * 1. check user has rented room

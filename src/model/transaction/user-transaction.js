@@ -5,7 +5,7 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const userTransaction = new mongoose.Schema(
   {
-    userId: { type: ObjectId, required: true, ref: 'User' },
+    userId: { type: ObjectId, required: true, ref: "User" },
     transactionId: { type: String, required: true, unique: false },
     action: { type: String, required: true },
     data: { type: Object, default: null },
@@ -17,7 +17,7 @@ const userTransaction = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 userTransaction.plugin(Timezone);
