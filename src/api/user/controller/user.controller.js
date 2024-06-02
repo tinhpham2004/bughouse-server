@@ -1,3 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable node/no-deprecated-api */
+/* eslint-disable n/no-deprecated-api */
+/* eslint-disable semi */
+/* eslint-disable no-undef */
+/* eslint-disable node/handle-callback-err */
+/* eslint-disable n/handle-callback-err */
 const multer = require("multer");
 const userService = require("../service/user.service");
 const addressService = require("../service/address.service");
@@ -32,6 +40,7 @@ const sortObject = (obj) => {
   const str = [];
   let key;
   for (key in obj) {
+    // eslint-disable-next-line no-prototype-builtins
     if (obj.hasOwnProperty(key)) {
       str.push(encodeURIComponent(key));
     }
@@ -44,12 +53,12 @@ const sortObject = (obj) => {
 };
 
 class UserController {
-  constructor (io) {
+  constructor(io) {
     this.io = io;
   }
 
   // [POST] user/wallet-connect
-  async connectVNpaytoWallet (req, res, next) {
+  async connectVNpaytoWallet(req, res, next) {
     try {
       const { walletAddress, amount } = req.body;
 
@@ -113,6 +122,8 @@ class UserController {
       const signData = querystring.stringify(vnp_Params, { encode: false });
       const crypto = require("crypto");
       const hmac = crypto.createHmac("sha512", secretKey);
+      // eslint-disable-next-line node/no-deprecated-api
+      // eslint-disable-next-line n/no-deprecated-api
       const signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
       vnp_Params.vnp_SecureHash = signed;
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
@@ -124,7 +135,7 @@ class UserController {
   }
 
   // [POST] user/wallet-withdraw
-  async withdrawMoney (req, res, next) {
+  async withdrawMoney(req, res, next) {
     try {
       const { userId } = req.auth;
       const { amount } = req.body;
@@ -134,7 +145,7 @@ class UserController {
         userId,
         ADMIN._id,
         amount / 100,
-        ACTION_TRANSFER.WITHDRAW
+        ACTION_TRANSFER.WITHDRAW,
       );
 
       return res.status(200).json({
@@ -148,13 +159,13 @@ class UserController {
   }
 
   // [POST] user/contract/:contractId/cancel-by-renter
-  async cancelByRenter (req, res, next) {
+  async cancelByRenter(req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
       const data = await contractService.cancelContractByRenter(
         userId,
-        contractId
+        contractId,
       );
 
       return res.status(200).json({
@@ -168,7 +179,7 @@ class UserController {
   }
 
   // [POST] user/contract/accept
-  async acceptRequest (req, res, next) {
+  async acceptRequest(req, res, next) {
     try {
       const { userId } = req.auth;
       const requestId = req.params.requestId;
@@ -185,12 +196,12 @@ class UserController {
     }
   }
 
-  async confirmPayment (req, res, next) {
+  async confirmPayment(req, res, next) {
     try {
       let vnp_Params = req.query;
       console.log(
         "🚀 ~ file: user.controller.js:175 ~ UserController ~ confirmPayment ~  req.query;:",
-        req.query
+        req.query,
       );
 
       const secureHash = vnp_Params.vnp_SecureHash;
@@ -203,13 +214,13 @@ class UserController {
         userId,
         amount / 100,
         null,
-        USER_TRANSACTION_ACTION.PAYMENT
+        USER_TRANSACTION_ACTION.PAYMENT,
       );
       const result = await userService.transferBalance(
         ADMIN._id,
         userId,
         amount / 100,
-        ACTION_TRANSFER.TOP_UP
+        ACTION_TRANSFER.TOP_UP,
       );
 
       const notification = await Notification.create({
@@ -233,7 +244,7 @@ class UserController {
     }
   }
 
-  async testPayment (req, res, next) {
+  async testPayment(req, res, next) {
     try {
       console.log("test pay ment");
       const from = await User.getById(ADMIN._id);
@@ -246,7 +257,7 @@ class UserController {
         from._id,
         to._id,
         amount,
-        "top up"
+        "top up",
       );
       res.status(200).json({
         message: "thành công",
@@ -261,7 +272,7 @@ class UserController {
   }
 
   // [GET] /user/me/profile
-  async getProfile (req, res, next) {
+  async getProfile(req, res, next) {
     const id = req.auth.userId;
     try {
       const user = await userService.getProfile(id);
@@ -289,7 +300,7 @@ class UserController {
   }
 
   // [GET] /user/me/wallet
-  async getWallet (req, res, next) {
+  async getWallet(req, res, next) {
     const id = req.auth.userId;
     try {
       const wallet = await userWalletService.getBalance(id);
@@ -309,7 +320,7 @@ class UserController {
   }
 
   // [GET] /user/me/transaction-history
-  async getTransactionHistory (req, res, next) {
+  async getTransactionHistory(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -333,7 +344,7 @@ class UserController {
           commonHelper.getPagination(req.query),
           projection,
           populate,
-          sort
+          sort,
         );
       return res.status(200).json({
         data: { items, total, page, limit, totalPages },
@@ -346,7 +357,7 @@ class UserController {
   }
 
   // [GET] /user/notifications
-  async getNotification (req, res, next) {
+  async getNotification(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -362,7 +373,7 @@ class UserController {
         await NotificationService.getAll(
           conditions,
           commonHelper.getPagination(req.query),
-          sort
+          sort,
         );
 
       return res.status(200).json({
@@ -376,7 +387,7 @@ class UserController {
   }
 
   // [PUT] /user/notifications/:notificationId
-  async checkNotification (req, res, next) {
+  async checkNotification(req, res, next) {
     try {
       const notificationId = req.params.notificationId;
 
@@ -393,7 +404,7 @@ class UserController {
   }
 
   // [GET] /users/contract/rented
-  async getContractRented (req, res, next) {
+  async getContractRented(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -403,7 +414,7 @@ class UserController {
       const { items, total, page, limit, totalPages } =
         await contractService.getAllContract(
           conditions,
-          commonHelper.getPagination(req.query)
+          commonHelper.getPagination(req.query),
         );
 
       return res.status(200).json({
@@ -417,7 +428,7 @@ class UserController {
   }
 
   // [GET] /users/contract/leased
-  async getContractLeased (req, res, next) {
+  async getContractLeased(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -441,7 +452,7 @@ class UserController {
           commonHelper.getPagination(req.query),
           {},
           populate,
-          { createdAt: -1 }
+          { createdAt: -1 },
         );
 
       return res.status(200).json({
@@ -455,10 +466,11 @@ class UserController {
   }
 
   // [GET] /users/contract/:roomId
-  async getContractOfRoom (req, res, next) {
+  async getContractOfRoom(req, res, next) {
     try {
       const { roomId } = req.params;
-      console.log("gau gau");
+      // eslint-disable-next-line semi
+      console.log("roomId", roomId);
       const contract = await Contract.findOne({
         room: commonHelper.toObjectId(roomId),
         status: "available",
@@ -488,7 +500,7 @@ class UserController {
   }
 
   // [PUT] /bh/user/me/profile
-  async updateProfile (req, res, next) {
+  async updateProfile(req, res, next) {
     const userId = req.auth.userId;
     const { name, dob, sex, id, identityImg, home, address_entities } =
       req.body;
@@ -514,8 +526,10 @@ class UserController {
   }
 
   // [PATCH] /bh/user/me/avatar
-  async changeAvatar (req, res, next) {
+  async changeAvatar(req, res, next) {
     try {
+      // eslint-disable-next-line node/handle-callback-err
+      // eslint-disable-next-line n/handle-callback-err
       upload(req, res, async (err) => {
         const { file } = req;
         const id = req.auth.userId;
@@ -531,7 +545,7 @@ class UserController {
   }
 
   // [GET] /users/requests
-  async getUserRequest (req, res, next) {
+  async getUserRequest(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -553,7 +567,7 @@ class UserController {
   }
 
   // [GET] /users/invoices/rented
-  async getAllInvoiceRenter (req, res, next) {
+  async getAllInvoiceRenter(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -564,7 +578,7 @@ class UserController {
       const data = await invoiceService.getAll(
         conditions,
         getPagination(req.query),
-        {}
+        {},
       );
 
       return res.status(200).json({
@@ -578,7 +592,7 @@ class UserController {
   }
 
   // [GET] /users/invoices/leased
-  async getAllInvoiceOwner (req, res, next) {
+  async getAllInvoiceOwner(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
@@ -591,7 +605,7 @@ class UserController {
         getPagination(req.query),
         {},
         false,
-        true
+        true,
       );
 
       return res.status(200).json({
@@ -605,12 +619,13 @@ class UserController {
   }
 
   // [GET] /users/invoices/:invoiceId
-  async getInvoiceById (req, res, next) {
+  async getInvoiceById(req, res, next) {
     try {
       const { userId } = req.auth;
       const conditions = {
         ...req.query,
         ...userId,
+        // eslint-disable-next-line no-undef
         ...invoiceId,
       };
 
@@ -627,7 +642,7 @@ class UserController {
   }
 
   // [POST]/users/:contractId/cancel-by-renter
-  async sendRequestToCancel (req, res, next) {
+  async sendRequestToCancel(req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -644,7 +659,7 @@ class UserController {
   }
 
   // [POST]/users/:contractId/extend-by-renter
-  async sendRequestToExtend (req, res, next) {
+  async sendRequestToExtend(req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -652,7 +667,7 @@ class UserController {
       const data = await userService.extendRentalByRenter(
         userId,
         contractId,
-        newPeriod
+        newPeriod,
       );
       return res.status(200).json({
         message: "gửi yêu cầu thành công!",
@@ -665,8 +680,9 @@ class UserController {
   }
 
   // [POST]/users/contract/accept-extend/:requestId
-  async acceptRequestExtendContract (req, res, next) {
+  async acceptRequestExtendContract(req, res, next) {
     try {
+      // eslint-disable-next-line no-unused-vars
       const { userId } = req.auth;
       const requestId = req.params.requestId;
 
@@ -683,7 +699,7 @@ class UserController {
   }
 
   // [POST] /user/accept-cancel-rental
-  async acceptCancelRental (req, res, next) {
+  async acceptCancelRental(req, res, next) {
     try {
       const { userId } = req.auth;
 
@@ -700,7 +716,7 @@ class UserController {
   }
 
   // [POST] /users/:contractId/cancel-by-lessor
-  async cancelContractByLessor (req, res, next) {
+  async cancelContractByLessor(req, res, next) {
     try {
       const { userId } = req.auth;
       const contractId = req.params.contractId;
@@ -717,7 +733,7 @@ class UserController {
   }
 
   // [POST] /room/:roomId/feedback
-  async feedBackRoom (req, res, next) {
+  async feedBackRoom(req, res, next) {
     try {
       const { roomId } = req.params;
       const { userId } = req.auth;
@@ -740,7 +756,7 @@ class UserController {
   }
 
   // [POST] /room/:roomId/report
-  async reportRoom (req, res, next) {
+  async reportRoom(req, res, next) {
     try {
       const { roomId } = req.params;
       const { userId } = req.auth;

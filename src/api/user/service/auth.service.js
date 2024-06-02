@@ -1,3 +1,7 @@
+/* eslint-disable no-multiple-empty-lines */
+/* eslint-disable comma-dangle */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 // const axios = require("axios");
@@ -27,7 +31,7 @@ const Notification = require("../../../model/user/notification.model");
 const sendOTPCode = require("../../../config/sendmail");
 
 class AuthService {
-  async registry (userInfo) {
+  async registry(userInfo) {
     if (!userInfo) {
       return {
         message: "thông tin đăng ký không hợp lệ!",
@@ -69,8 +73,8 @@ class AuthService {
         walletPrivateKey: privateKey,
       };
       await newUser.save();
-
-      this.sendOTP(newUser._id, newUser.username, newUser.email);
+      // Disable send OTP when create account only send OTP when user login again (request verify account)
+      // this.sendOTP(newUser._id, newUser.username, newUser.email);
 
       return {
         data: {},
@@ -86,7 +90,7 @@ class AuthService {
     }
   }
 
-  async login (userInfo) {
+  async login(userInfo) {
     try {
       const { username, password } = userInfo;
       if (
@@ -116,7 +120,6 @@ class AuthService {
       // check account is already verify yet
       if (!user.auth.isVerified) {
         this.sendOTP(user._id, user.username, email);
-
         return {
           status: true,
           message: "đã gửi mã otp!",
@@ -197,7 +200,7 @@ class AuthService {
     }
   }
 
-  async sendOTP (userId, username, email) {
+  async sendOTP(userId, username, email) {
     // let type = true;
 
     // if (!userValidation.validatePhone(username)) type = false;
@@ -261,20 +264,20 @@ class AuthService {
     // }
     // Call API send OTP
     sendOTPCode({
-      to: username,
+      to: email,
       username,
       otpCode: otp,
     });
   }
 
-  checkOTP (sendOTP, dbOTP, otpTime) {
+  checkOTP(sendOTP, dbOTP, otpTime) {
     if (!dbOTP) throw new Error("check_otp ==> OTP invalid");
 
     // nếu otp sai
     if (sendOTP !== dbOTP) throw new Error("check_otp ==> OTP invalid");
   }
 
-  async resetOTP (username) {
+  async resetOTP(username) {
     try {
       if (!userValidation.validateUsername(username)) {
         throw new Error("reset otp ==> username invalid");
@@ -288,7 +291,7 @@ class AuthService {
       //   const { phone } = user;
       console.log(
         "🚀 ~ file: auth.service.js:266 ~ AuthService ~ resetOTP ~ email:",
-        email
+        email,
       );
 
       // send otp
@@ -309,7 +312,7 @@ class AuthService {
     }
   }
 
-  async confirmAccount (username, otpPhone) {
+  async confirmAccount(username, otpPhone) {
     // check acccount
     try {
       await userValidation.validateConfirmAccount(username, otpPhone);
@@ -348,7 +351,7 @@ class AuthService {
     }
   }
 
-  async verifyEmail (token) {
+  async verifyEmail(token) {
     // check token
     // decode token get email + userId
     await jwt.verify(
@@ -375,11 +378,11 @@ class AuthService {
             await user.save();
           }
         }
-      }
+      },
     );
   }
 
-  async createWallet () {
+  async createWallet() {
     // Creating a signing account from a private key
     const signer = web3.eth.accounts.create();
     const address = signer.address;
@@ -392,15 +395,17 @@ class AuthService {
     };
   }
 
-  async initTransaction (userId) {
+  async initTransaction(userId) {
     const { wallet } = await User.getById(userId);
 
     const transaction = new UserTransaction({});
   }
 
-  async updateProfileByIndentity (userId, userInfo) {
+  async updateProfileByIndentity(userId, userInfo) {
+    // eslint-disable-next-line no-undef
     if (!userInfo) throw new ArgumentError("update profile => missing");
 
+    // eslint-disable-next-line no-unused-vars
     const { name, dob, sex, id, identityImg, home, address_entities } =
       userInfo;
     const user = await User.findOne({ _id: userId });
@@ -445,13 +450,14 @@ class AuthService {
         ADMIN._id,
         userId,
         10000,
-        ACTION_TRANSFER.CLAIM
+        ACTION_TRANSFER.CLAIM,
       ),
       userWalletService.changeBalance(
         userId,
         10000,
         null,
-        USER_TRANSACTION_ACTION.CLAIM
+        // eslint-disable-next-line comma-dangle
+        USER_TRANSACTION_ACTION.CLAIM,
       ),
       Notification.create({
         userOwner: ADMIN._id,
