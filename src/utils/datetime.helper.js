@@ -38,7 +38,9 @@ module.exports = {
     const nowTemp = new Date();
 
     // get year
-    if (nowTemp.getFullYear() - date.getFullYear() > 0) { return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`; }
+    if (nowTemp.getFullYear() - date.getFullYear() > 0) {
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    }
 
     const now = new Date();
     const numberMiliseconds = now - date;
@@ -58,15 +60,12 @@ module.exports = {
     return `${numberMiliseconds} giây`;
   },
 
-
   periodDate: (date, period) => {
-    if (!date || !period)
-      throw new MyError('period date missing parameter');
+    if (!date || !period) throw new MyError("period date missing parameter");
     const periodDate = new Date(date);
     periodDate.setDate(1); // set the day of the month to 1
     periodDate.setMonth(periodDate.getMonth() + period); // add the specified number of months
 
     return periodDate;
-  }
-
+  },
 };

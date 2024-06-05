@@ -3,18 +3,18 @@ const { Contract, ethers, Wallet } = require("ethers");
 class Web3Services {
   static provider = null;
 
-  static createWeb3Provider(rpc) {
+  static createWeb3Provider (rpc) {
     if (!Web3Services.provider) {
       Web3Services.provider = new ethers.providers.JsonRpcProvider(rpc);
     }
     return Web3Services.provider;
   }
 
-  static createSigner(privateKey) {
+  static createSigner (privateKey) {
     return new Wallet(privateKey, provider);
   }
 
-  static createContract(signer, address, abi) {
+  static createContract (signer, address, abi) {
     return new Contract(address, abi, signer);
   }
 
@@ -52,7 +52,7 @@ class Web3Services {
   //   return null;
   // }
 
-  static async retryOperation(operation, retries = 10, delay = 1000) {
+  static async retryOperation (operation, retries = 10, delay = 1000) {
     let attempt = 0;
     while (attempt < retries) {
       try {
@@ -69,6 +69,7 @@ class Web3Services {
     }
     throw new Error("All retry attempts failed");
   }
+
   /**
    *
    * @param {string} rpc - The RPC URL.
@@ -79,7 +80,7 @@ class Web3Services {
    * @param {Array} params - Parameters for the contract method.
    * @returns
    */
-  static async fetchData({
+  static async fetchData ({
     rpc,
     providerMethod,
     contractAddress,
@@ -116,7 +117,7 @@ class Web3Services {
    * @param {Array} params - Parameters for the contract method.
    * @returns {Promise<Object>} The transaction receipt.
    */
-  static async sendTransaction({
+  static async sendTransaction ({
     rpc,
     privateKey,
     contractAddress,

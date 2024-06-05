@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const RoomController = require('../controller/room.controller');
+const router = require("express").Router();
+const RoomController = require("../controller/room.controller");
 
 /**
  * @swagger
@@ -43,15 +43,15 @@ const RoomController = require('../controller/room.controller');
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/create-room', RoomController.createRoomForRent);
-router.post('/re-open/:roomId', RoomController.reOpenRoom);
+router.post("/create-room", RoomController.createRoomForRent);
+router.post("/re-open/:roomId", RoomController.reOpenRoom);
 
-router.put('/:roomId', RoomController.updateRoom);
-router.get('/', RoomController.getAllRoom);
-router.get('/:roomId', RoomController.getRoom);
-router.get('/:roomId/feedback', RoomController.getRoomFeedBack);
-router.get('/:roomId/report', RoomController.getRoomReport);
-router.get('/:userId', RoomController.getOwnerRoom);
-router.get('/user/rented', RoomController.getRentedRoom);
-router.get('/user/leased', RoomController.getLeasedRoom);
+router.put("/:roomId", RoomController.updateRoom);
+router.get("/", RoomController.getAllRoom);
+router.get("/:roomId", RoomController.getRoom);
+router.get("/:roomId/feedback", RoomController.getRoomFeedBack);
+router.get("/:roomId/report", RoomController.getRoomReport);
+router.get("/:userId", RoomController.getOwnerRoom);
+router.get("/user/rented", RoomController.getRentedRoom);
+router.get("/user/leased", RoomController.getLeasedRoom);
 module.exports = router;

@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const InvoiceController = require('../controller/invoice.controller');
+const router = require("express").Router();
+const InvoiceController = require("../controller/invoice.controller");
 
 /**
  * @swagger
@@ -99,20 +99,20 @@ const InvoiceController = require('../controller/invoice.controller');
  *                 data:
  *                    type: object
  *                    properties:
- *                      vat: 
+ *                      vat:
  *                        type: number
  *                        example: 0.1
- *                      payStatus: 
+ *                      payStatus:
  *                        type: string
  *                        description: status of paymont contain "Unpaid", "Pending", "Complete", "Failed", "Declined", "Cancelled", "Abandoned", "Refunsed"
  *                        example: "Pending"
- *                      amount: 
+ *                      amount:
  *                        type: number
  *                        example: 20000000000
- *                      paymentMethod: 
+ *                      paymentMethod:
  *                        type: string
  *                        example: "VNPay"
- *                      enable: 
+ *                      enable:
  *                        type: boolean
  *                        example: true
  *                      _id:
@@ -131,7 +131,7 @@ const InvoiceController = require('../controller/invoice.controller');
  *       500:
  *         description: Internal server error
  */
-router.post('/create', InvoiceController.createInvoice);
-router.post('/:invoiceId/payment', InvoiceController.payForRentEachMonth);
-router.post('/:invoiceId/extends', InvoiceController.extendPaymentInvoice);
+router.post("/create", InvoiceController.createInvoice);
+router.post("/:invoiceId/payment", InvoiceController.payForRentEachMonth);
+router.post("/:invoiceId/extends", InvoiceController.extendPaymentInvoice);
 module.exports = router;

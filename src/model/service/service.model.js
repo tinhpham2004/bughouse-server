@@ -17,7 +17,7 @@ const serviceSchema = new mongoose.Schema(
     },
     unit: {
       type: ObjectId,
-      ref: 'Unit'
+      ref: "Unit",
     },
     enable: {
       type: Boolean,
@@ -27,7 +27,7 @@ const serviceSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  },
+  }
 );
 
 serviceSchema.plugin(Timezone);

@@ -262,8 +262,7 @@ RentalContract.endRent = async (ownerAddress, room, renterAddress) => {
   ]);
 
   if (updateRoom.modifiedCount < 1) throw new Error("update room fail!");
-  if (updateContract.modifiedCount < 1)
-    throw new Error("update contract fail!");
+  if (updateContract.modifiedCount < 1) { throw new Error("update contract fail!"); }
 
   const notification = await Notification.create({
     userOwner: ADMIN._id,
@@ -356,8 +355,7 @@ RentalContract.endRentInDue = async (
   ]);
 
   if (updateRoom.modifiedCount < 1) throw new Error("update room fail!");
-  if (updateContract.modifiedCount < 1)
-    throw new Error("update contract fail!");
+  if (updateContract.modifiedCount < 1) { throw new Error("update contract fail!"); }
 
   const notification = await Notification.create({
     userOwner: ADMIN._id,
@@ -433,7 +431,7 @@ RentalContract.transferBalance = async (
       from: wallet.walletAddress,
       to: CONTRACT_ADDRESS,
       data: pay,
-      value: value, // Giá trị được chuyển đi
+      value, // Giá trị được chuyển đi
       gas: 300000,
     };
     // Ký giao dịch
@@ -462,8 +460,7 @@ RentalContract.extendsContract = async (
   roomUid,
   contractHash
 ) => {
-  if (!ownerAddress || !roomUid || !contractHash)
-    throw new Error("missing parameter");
+  if (!ownerAddress || !roomUid || !contractHash) { throw new Error("missing parameter"); }
   const { wallet, _id } = await User.getUserByWallet(ownerAddress);
   const signOwner = wallet;
 
@@ -510,7 +507,7 @@ RentalContract.signByRenter = async (
   depositAmount
 ) => {
   const { wallet, _id } = await User.getUserByWallet(renterAddress);
-  let userPay = await vndToEth((rentAmount + depositAmount + 1000) / 100);
+  const userPay = await vndToEth((rentAmount + depositAmount + 1000) / 100);
   console.log("🚀 ~ userPay:", userPay);
   const value = convertBalanceToWei(userPay);
   console.log("🚀 ~ value:", value);
@@ -525,7 +522,7 @@ RentalContract.signByRenter = async (
     from: wallet.walletAddress,
     to: CONTRACT_ADDRESS,
     gasLimit: web3.utils.toHex(300000),
-    value: value,
+    value,
     data: signRenterAbi,
   };
 
@@ -638,7 +635,7 @@ RentalContract.setRoomForRent = async (
     userOwner: ADMIN._id,
     type: "NOTIFICATION",
     tag: [_id],
-    content: `You have paid 5000 VND for creating a rental room!`,
+    content: "You have paid 5000 VND for creating a rental room!",
   });
 
   const notification = await Notification.create({

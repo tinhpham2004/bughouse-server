@@ -27,20 +27,21 @@ const addressSchema = new mongoose.Schema(
     },
     Lat_ggmap: {
       type: Number,
-      default: 0
+      default: 0,
     },
     Lng_ggmap: {
       type: Number,
-      default: 0
+      default: 0,
     },
     address_detail: {
-      type: String, default: 0
+      type: String,
+      default: 0,
     },
   },
   {
     _id: false,
     autoCreate: false,
-  },
+  }
 );
 
 addressSchema.plugin(Timezone);

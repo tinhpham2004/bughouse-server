@@ -11,8 +11,7 @@ const scheduleNotifyService = {
     const lessorIds = contracts.map((contract) => contract.lessor);
     const today = new Date();
     // for each lessor create a nofity
-    if (!lessorIds || lessorIds.length === 0)
-      throw new MyError("lessorId invalid");
+    if (!lessorIds || lessorIds.length === 0) { throw new MyError("lessorId invalid"); }
 
     for (let i = 0; i < lessorIds.length; i++) {
       const user = await User.getById(lessorIds[i]);

@@ -15,7 +15,7 @@ const TimerSchema = new mongoose.Schema(
       updatedAt: false,
     },
     versionKey: false,
-  },
+  }
 );
 
 module.exports = mongoose.model("Timer", TimerSchema);

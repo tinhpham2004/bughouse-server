@@ -14,17 +14,17 @@ const contractSchema = new mongoose.Schema(
     renter: {
       type: ObjectId,
       require: true,
-      ref: 'User'
+      ref: "User",
     },
     lessor: {
       type: ObjectId,
       require: true,
-      ref: 'User'
+      ref: "User",
     },
     room: {
       type: ObjectId,
       require: true,
-      ref: 'Room'
+      ref: "Room",
     },
     dateRent: Date,
     payTime: {
@@ -43,18 +43,25 @@ const contractSchema = new mongoose.Schema(
       default: true,
     },
     penaltyFeeEndRent: { type: Number, default: 0 },
-    status: { type: String, enum: ["available", "not-available", "continue"], default: "available" },
-    plusContract: { type: String, default: "" }
+    status: {
+      type: String,
+      enum: ["available", "not-available", "continue"],
+      default: "available",
+    },
+    plusContract: { type: String, default: "" },
   },
   {
     timestamps: true,
     versionKey: false,
-  },
+  }
 );
 
 contractSchema.plugin(Timezone);
 
-contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }) => {
+contractSchema.statics.getOne = async (
+  contractId,
+  projection = { updatedAt: 0 }
+) => {
   const roomLookup = {
     from: "rooms",
     let: { room: "$room" },
@@ -74,7 +81,7 @@ contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }
                 phone: 1,
                 email: 1,
                 identity: 1,
-                wallet: 1
+                wallet: 1,
               },
             },
           ],
@@ -85,7 +92,7 @@ contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }
           let: { serviceIds: "$services" },
           pipeline: [{ $match: { $expr: { $in: ["$_id", "$$serviceIds"] } } }],
           as: "services",
-        }
+        },
       },
       { $project: { updatedAt: 0 } },
     ],
@@ -108,7 +115,7 @@ contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }
           email: 1,
           identity: 1,
           wallet: 1,
-          username: 1
+          username: 1,
         },
       },
     ],
@@ -131,7 +138,7 @@ contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }
           email: 1,
           identity: 1,
           wallet: 1,
-          username: 1
+          username: 1,
         },
       },
     ],
@@ -148,7 +155,7 @@ contractSchema.statics.getOne = async (contractId, projection = { updatedAt: 0 }
     { $project: projection },
   ]);
   return items[0];
-}
+};
 
 contractSchema.pre("save", function (next) {
   this.penaltyFeeEndRent = (this.payment * 50) / 100;

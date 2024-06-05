@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const serviceApartmentController = require('../controller/service.controller');
+const router = require("express").Router();
+const serviceApartmentController = require("../controller/service.controller");
 
-router.post('/unit/create-unit', serviceApartmentController.createUnit);
-router.put('/service-demand', serviceApartmentController.updateServiceDemand);
+router.post("/unit/create-unit", serviceApartmentController.createUnit);
+router.put("/service-demand", serviceApartmentController.updateServiceDemand);
 /**
  * @swagger
  * /bh/service/unit:
@@ -13,6 +13,6 @@ router.put('/service-demand', serviceApartmentController.updateServiceDemand);
  *       200:
  *         description: A list of rooms
  */
-router.get('/unit', serviceApartmentController.getAllUnit);
-router.get('/:roomId/service-demand', serviceApartmentController.getServiceDemand)
+router.get("/unit", serviceApartmentController.getAllUnit);
+router.get("/:roomId/service-demand", serviceApartmentController.getServiceDemand);
 module.exports = router;

@@ -1,5 +1,5 @@
 class ArgumentError extends Error {
-  constructor(...params) {
+  constructor (...params) {
     super();
     this.status = 400;
     this.message = `${params} Params invalid`;

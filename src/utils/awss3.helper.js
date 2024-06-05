@@ -16,7 +16,7 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 class AWSS3Helper {
-  async uploadFile(file, bucketName = BucketName) {
+  async uploadFile (file, bucketName = BucketName) {
     const filePath = `${uuid() + Date.now().toString()}${file.originalname}`;
 
     const uploadParams = {
@@ -53,7 +53,7 @@ class AWSS3Helper {
     }
   }
 
-  async uploadFileBuffer(buffer, bucketName = BucketName) {
+  async uploadFileBuffer (buffer, bucketName = BucketName) {
     const filePath = `${uuid() + Date.now().toString()}`;
 
     const uploadParams = {
@@ -80,7 +80,7 @@ class AWSS3Helper {
     }
   }
 
-  async deleteFile(url, bucketName = BucketName) {
+  async deleteFile (url, bucketName = BucketName) {
     const urlSplit = url.split("/");
     const key = urlSplit[urlSplit.length - 1];
 

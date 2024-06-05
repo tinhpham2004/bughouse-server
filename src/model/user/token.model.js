@@ -17,7 +17,7 @@ const TokenSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 TokenSchema.plugin(Timezone);

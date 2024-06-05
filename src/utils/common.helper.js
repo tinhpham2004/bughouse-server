@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const MyError = require("../exception/MyError");
 const ArgumentError = require("../exception/ArgumentError");
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require("mongoose").Types.ObjectId;
 const commonHelper = {
   isEmpty: (obj) => {
     if (!obj) return true;
@@ -45,11 +45,11 @@ const commonHelper = {
   convertToNumber: (value) => {
     value = Number(value);
 
-    if (value === undefined || value === null)
-      throw new MyError('missing value');
+    if (value === undefined || value === null) {
+      throw new MyError("missing value");
+    }
 
-    if (isNaN(value))
-      throw new MyError('Value must be number');
+    if (isNaN(value)) throw new MyError("Value must be number");
 
     if (value < 0) {
       throw new Error("Number of floor cannot be negative");
@@ -60,30 +60,31 @@ const commonHelper = {
   convertUpperStringToNFD: (value) => {
     // normalize() function takes a form argument that specifies the Unicode normalization form to use. In this case
     // expression /[\u0300-\u036f]/g matches all Unicode characters in the "Mn" category, which includes most diacritical marks used in Latin scripts.
-    const normalizedStr = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const result = normalizedStr.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+    const normalizedStr = value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+    const result = normalizedStr
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase());
 
     // const formattedStr = normalizedStr.charAt(0).toUpperCase() + normalizedStr.slice(1).toLowerCase();
     return result;
   },
 
   validateGender: (value) => {
-    if (!value)
-      throw new ArgumentError('valid gender ==> ');
+    if (!value) throw new ArgumentError("valid gender ==> ");
 
-    const gender = ['Male', 'Female', 'All'];
+    const gender = ["Male", "Female", "All"];
 
     return gender.includes(value);
   },
 
   deepCopy: (obj) => {
-    if (typeof (obj) === 'object') {
-      if (Array.isArray(obj))
-        return obj.map(this.deepCopy);
+    if (typeof obj === "object") {
+      if (Array.isArray(obj)) return obj.map(this.deepCopy);
       else {
         const copy = {};
-        for (const value in obj)
-          copy[value] = this.deepCopy(obj[value]);
+        for (const value in obj) copy[value] = this.deepCopy(obj[value]);
 
         return copy;
       }
@@ -91,11 +92,10 @@ const commonHelper = {
     return obj;
   },
   toObjectId: (string) => {
-    if (!string)
-      throw new ArgumentError('to objectIb ==> ');
+    if (!string) throw new ArgumentError("to objectIb ==> ");
 
     return new ObjectId(string);
-  }
+  },
 };
 
 module.exports = commonHelper;

@@ -2,7 +2,7 @@ const authService = require("../service/auth.service");
 
 class AuthController {
   // [POST] bh/auth/registry
-  async registry(req, res, next) {
+  async registry (req, res, next) {
     try {
       const { message, errorCode, data } = await authService.registry(req.body);
 
@@ -17,7 +17,7 @@ class AuthController {
   }
 
   // [POST] bh/auth/login
-  async login(req, res, next) {
+  async login (req, res, next) {
     try {
       const { message, data, errorCode } = await authService.login(req.body);
 
@@ -32,7 +32,7 @@ class AuthController {
   }
 
   // [POST] bh/auth/confirm-account
-  async confirmAccount(req, res, next) {
+  async confirmAccount (req, res, next) {
     const { username, otp } = req.body;
 
     try {
@@ -52,7 +52,7 @@ class AuthController {
   }
 
   // [POST] bh/auth/reset-otp
-  async resetOTP(req, res, next) {
+  async resetOTP (req, res, next) {
     const { username } = req.body;
     try {
       const { message, data, errorCode } = await authService.resetOTP(username);
@@ -68,7 +68,7 @@ class AuthController {
   }
 
   // [POST] bh/auth/verify-email
-  async verifyEmail(req, res, next) {
+  async verifyEmail (req, res, next) {
     try {
       const { token } = req.params;
       if (!token) {
@@ -91,8 +91,8 @@ class AuthController {
     }
   }
 
-  //[PUT] bh/auth/verify-info
-  async verifyInfoUser(req, res, next) {
+  // [PUT] bh/auth/verify-info
+  async verifyInfoUser (req, res, next) {
     const { userId, name, dob, sex, id, home, address_entities, identityImg } =
       req.body;
     try {

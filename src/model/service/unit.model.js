@@ -7,13 +7,13 @@ const unitSchema = new mongoose.Schema(
     name: String,
     enable: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   {
     timestamps: true,
     versionKey: false,
-  },
+  }
 );
 
 unitSchema.plugin(Timezone);

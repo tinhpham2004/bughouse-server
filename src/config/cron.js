@@ -10,27 +10,27 @@ const deleteTime = "*/3 * * * *";
 // });
 
 cron.schedule("*/180 * * * *", async () => {
-    console.log("AUTO REQUEST ===> START");
-    await RequestService.executeRequestInDue();
-    console.log("AUTO REQUEST ===> END");
+  console.log("AUTO REQUEST ===> START");
+  await RequestService.executeRequestInDue();
+  console.log("AUTO REQUEST ===> END");
 });
 
 cron.schedule(demandTime, async () => {
-    console.log("AUTO SERVICE DEMANDS ===> START");
-    await CronService.autoCreateInvoice();
-    console.log("AUTO SERVICE DEMANDS ===> END");
+  console.log("AUTO SERVICE DEMANDS ===> START");
+  await CronService.autoCreateInvoice();
+  console.log("AUTO SERVICE DEMANDS ===> END");
 });
 
 cron.schedule(invoiceTime, async () => {
-    console.log("AUTO INVOICE PAYMENT ===> START");
-    await CronService.autoPayForInvoice();
-    console.log("AUTO INVOICE PAYMENT ===> END");
+  console.log("AUTO INVOICE PAYMENT ===> START");
+  await CronService.autoPayForInvoice();
+  console.log("AUTO INVOICE PAYMENT ===> END");
 });
 
 cron.schedule(deleteTime, async () => {
-    console.log("AUTO DELETE ROOM FAIL===> START");
-    await CronService.deleteRoomFail();
-    console.log("AUTO DELETE ROOM FAIL ===> END");
+  console.log("AUTO DELETE ROOM FAIL===> START");
+  await CronService.deleteRoomFail();
+  console.log("AUTO DELETE ROOM FAIL ===> END");
 });
 
 module.exports = cron;

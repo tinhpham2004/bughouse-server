@@ -8,11 +8,11 @@ const invoiceSchema = new mongoose.Schema(
   {
     contract: {
       type: ObjectId,
-      ref: 'Contract'
+      ref: "Contract",
     },
     vat: {
       type: Number,
-      default: 0.1
+      default: 0.1,
     },
     amount: {
       type: Number,
@@ -36,16 +36,16 @@ const invoiceSchema = new mongoose.Schema(
     ],
     paymentDate: { type: Date, default: null },
     startDate: { type: Date, default: new Date() },
-    endDate: { type: Date, },
+    endDate: { type: Date },
     enable: { type: Boolean, default: true },
     hash: { type: String },
     txhash: { type: String },
-    isExtends: { type: Boolean, default: false }
+    isExtends: { type: Boolean, default: false },
   },
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
 invoiceSchema.plugin(Timezone);
@@ -53,17 +53,16 @@ invoiceSchema.statics.getOne = async (invoiceId) => {
   const invoice = await Invoice.findById(invoiceId)
     .populate([
       {
-        path: 'contract',
-        select: '-updatedAt'
+        path: "contract",
+        select: "-updatedAt",
       },
       {
-        path: 'serviceDemands',
-        select: '-updatedAt'
-      }
-    ])
-  if (!invoice)
-    throw new MyError('invoice not found');
+        path: "serviceDemands",
+        select: "-updatedAt",
+      },
+    ]);
+  if (!invoice) { throw new MyError("invoice not found"); }
   return invoice;
-}
+};
 const Invoice = mongoose.model("Invoice", invoiceSchema);
 module.exports = Invoice;

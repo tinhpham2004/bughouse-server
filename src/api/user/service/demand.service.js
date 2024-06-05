@@ -12,7 +12,7 @@ const ServiceDemandValidate = require("../validate/demand.validate");
 const roomValidate = require("../validate/room.validaste");
 
 class ServiceDemandService {
-  async createServiceDemand(serviceId, serviceDemandInfo) {
+  async createServiceDemand (serviceId, serviceDemandInfo) {
     const service = await Service.findById(serviceId).populate({
       path: "unit",
       select: "name",
@@ -22,7 +22,7 @@ class ServiceDemandService {
 
     const { basePrice, unit } = service;
 
-    let serviceDemand = await ServiceDemandValidate.validateDemandInfo(
+    const serviceDemand = await ServiceDemandValidate.validateDemandInfo(
       serviceId,
       serviceDemandInfo
     );
@@ -38,7 +38,7 @@ class ServiceDemandService {
     return serviceDemand;
   }
 
-  async getListServiceDemandRoomAtMonth(roomId, atMonth) {
+  async getListServiceDemandRoomAtMonth (roomId, atMonth) {
     const { services } = await Room.findById(roomId).populate([
       {
         path: "services",
@@ -60,21 +60,21 @@ class ServiceDemandService {
     return serviceDemands;
   }
 
-  async createServiceDemandForRoom(contractId) {
+  async createServiceDemandForRoom (contractId) {
     if (!contractId) throw new ArgumentError("invoice service ==>");
 
     const contract = await Contract.getOne(contractId);
     console.log("🚀 ~ file: demand.service.js:68 ~ ServiceDemandService ~ createServiceDemandForRoom ~ contract:", contract);
 
-    let { room, period, dateRent } = contract;
+    const { room, period, dateRent } = contract;
 
     const rentalDate = datetimeHelper.toObject(dateRent);
 
-    let { expiredDate, services } = ServiceDemandValidate.validateCreateDemandForRoom({ room, period, dateRent });
+    const { expiredDate, services } = ServiceDemandValidate.validateCreateDemandForRoom({ room, period, dateRent });
 
     const listDemand = [];
 
-    for (let serDemand of services) {
+    for (const serDemand of services) {
       for (let i = rentalDate.month; i <= expiredDate.month; i++) {
         let atYear = rentalDate.year;
         if (rentalDate.year < expiredDate.year) atYear = expiredDate.year;
@@ -91,7 +91,7 @@ class ServiceDemandService {
     return listDemand;
   }
 
-  async updateServiceDemandInvoice(roomId, demandInfo) {
+  async updateServiceDemandInvoice (roomId, demandInfo) {
     // get time to find list service Demand of room
     const room = await roomValidate.validRoom(roomId);
     if (!demandInfo) throw new ArgumentError("service demand ==> demandInfo ");
@@ -127,13 +127,12 @@ class ServiceDemandService {
     };
   }
 
-  async updateServiceDemadEachMonth(atMonth, serviceId, demandInfo) {
-    let servicePreDemand = await ServiceDemand.getPresentService(
+  async updateServiceDemadEachMonth (atMonth, serviceId, demandInfo) {
+    const servicePreDemand = await ServiceDemand.getPresentService(
       serviceId,
       atMonth
     );
-    if (!servicePreDemand)
-      throw new NotFoundError("demand service => present demand service");
+    if (!servicePreDemand) { throw new NotFoundError("demand service => present demand service"); }
 
     const serviceLastDemand = await ServiceDemand.getLastService(
       serviceId,
@@ -153,13 +152,13 @@ class ServiceDemandService {
     return servicePreDemand;
   }
 
-  async calculateDemandFee(serviceDemandId) {
-    let serviceDemand = await ServiceDemand.getById(serviceDemandId);
+  async calculateDemandFee (serviceDemandId) {
+    const serviceDemand = await ServiceDemand.getById(serviceDemandId);
     const { service, type } = serviceDemand;
 
     if (!service) throw new MyError("Not found service!");
 
-    let amount = this.amountServiceDemand(
+    const amount = this.amountServiceDemand(
       type,
       serviceDemand,
       service.basePrice
@@ -168,7 +167,7 @@ class ServiceDemandService {
     await serviceDemand.save({ new: true });
   }
 
-  amountServiceDemand(type, serviceDemand, basePrice) {
+  amountServiceDemand (type, serviceDemand, basePrice) {
     const QUALITY_TYPE = 0;
     const { oldIndicator, newIndicator, quality } = serviceDemand;
     switch (type) {

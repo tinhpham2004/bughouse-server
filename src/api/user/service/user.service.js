@@ -1,3 +1,8 @@
+/* eslint-disable no-multiple-empty-lines */
+/* eslint-disable comma-dangle */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+/* eslint-disable semi */
 require("dotenv").config();
 const userService = require("../service/user.service");
 
@@ -57,6 +62,7 @@ class UserService {
 
   // [GET] /bh/user/me/profile
   async getProfile(_id) {
+    // eslint-disable-next-line no-undef
     await tokens.save();
     const user = await User.findById(_id, { auth: 0 })
       .select("-updateAt")
@@ -78,8 +84,9 @@ class UserService {
     const validProfile = await userValidate.validateProfile(_id, profile);
     const modifieUser = await User.updateOne({ _id }, { ...validProfile });
 
-    if (modifieUser.modifiedCount < 1)
+    if (modifieUser.modifiedCount < 1) {
       throw new Error("Update user data fail!");
+    }
   }
 
   async changeAvatar(_id, file) {
@@ -100,7 +107,7 @@ class UserService {
       { _id },
       {
         avatar: avatarUrl,
-      }
+      },
     );
     if (updateUser.modifiedCount < 1) throw new Error("Update data fail!");
     return user;
@@ -146,7 +153,7 @@ class UserService {
     const notification = await Notification.create({
       user: ADMIN._id,
       type: "CONTINUE_RENTAL",
-      content: `extend rent room`,
+      content: "extend rent room",
       tag: [renter._id, contract.lessor],
     });
 
@@ -183,7 +190,7 @@ class UserService {
     const result = await contractService.continueContract(
       data.contract?.renter?._id,
       data?.contract?._id,
-      data?.newPeriod
+      data?.newPeriod,
     );
 
     await Request.deleteOne({ _id: requestId });
@@ -198,7 +205,7 @@ class UserService {
     const { data } = request;
 
     if (!request) throw new MyError("request not found");
-    //check contract due
+    // check contract due
     const dateEnd = new Date();
     // in due
     const inDue = await contractService.checkContractStatus(dateEnd, data._id);
@@ -208,14 +215,14 @@ class UserService {
       result = await RentalContract.endRent(
         data?.lessor?.wallet.walletAddress,
         data.room,
-        data?.renter?.wallet.walletAddress
+        data?.renter?.wallet.walletAddress,
       );
     }
     // const penaltyFee = (data.payment * 50) / 100;
     result = await RentalContract.endRentInDue(
       data?.lessor?.wallet.walletAddress,
       data.room,
-      data?.renter?.wallet.walletAddress
+      data?.renter?.wallet.walletAddress,
     );
     await Request.deleteOne({ _id: requestId });
     return result;
@@ -239,22 +246,44 @@ class UserService {
         select: "-updatedAt",
       },
     ]);
+
+    // Querry request cancel contract by renter if exist then delete it
+    const requests = await Request.find({
+      type: "CANCEL_RENTAL",
+      "data.renter._id": contract.renter._id,
+      "data.room._id": contract.room._id,
+      "data.lessor._id": contract.lessor._id,
+      to: contract.lessor._id,
+    });
+
+    if (requests.length > 0) {
+      // Remove all request cancel contract by renter if exist to make sure only when lessor cancel contract then cannot use request cancel contract by renter
+      await Request.deleteMany({
+        type: "CANCEL_RENTAL",
+        "data.renter._id": contract.renter._id,
+        "data.room._id": contract.room._id,
+        "data.lessor._id": contract.lessor._id,
+        to: contract.lessor._id,
+      });
+    }
+    // eslint-disable-next-line no-multiple-empty-lines
+
     if (!contract) throw new MyError("contract not found");
 
     const { renter, lessor, room, penaltyFeeEndRent } = contract;
 
-    //check contract due
+    // check contract due
     const dateEnd = new Date();
     // in due
     const inDue = await contractService.checkContractStatus(
       dateEnd,
-      contractId
+      contractId,
     );
 
     const result = await RentalContract.endRent(
       lessor?.wallet.walletAddress,
       room,
-      renter?.wallet?.walletAddress
+      renter?.wallet?.walletAddress,
     );
 
     if (inDue) {
@@ -262,14 +291,15 @@ class UserService {
         lessor._id,
         renter._id,
         penaltyFeeEndRent,
-        ACTION_TRANSFER.TRANSFER
+        ACTION_TRANSFER.TRANSFER,
       );
       await userWalletService.changeBalance(
         renter._id,
         penaltyFeeEndRent,
         data,
-        USER_TRANSACTION_ACTION.PAYMENT
+        USER_TRANSACTION_ACTION.PAYMENT,
       );
+      // eslint-disable-next-line no-unused-vars
       const notification = Notification.create({
         userOwner: ADMIN._id,
         tag: [renter._id],
@@ -288,13 +318,14 @@ class UserService {
 
     if (amount < 0) throw new MyError("amount not invalid!");
 
-    if (compare(from._id, to._id))
+    if (compare(from._id, to._id)) {
       throw new MyError("can not transfer for self");
+    }
     const result = await RentalContract.transferBalance(
       from?.wallet?.walletAddress,
       to?.wallet?.walletAddress,
       amount,
-      action
+      action,
     );
     return result;
   }
@@ -309,7 +340,8 @@ class UserService {
       _id,
       amount,
       {},
-      USER_TRANSACTION_ACTION.WITHDRAW
+      // eslint-disable-next-line comma-dangle
+      USER_TRANSACTION_ACTION.WITHDRAW,
     );
 
     const notification = await Notification.create({

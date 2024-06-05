@@ -6,7 +6,7 @@ const feedBackSchema = new mongoose.Schema(
     user: {
       type: Schema.Types.ObjectId,
       require: true,
-      ref: 'User'
+      ref: "User",
     },
     content: {
       type: String,
@@ -30,7 +30,7 @@ const feedBackSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  },
+  }
 );
 
 const FeedBack = mongoose.model("FeedBack", feedBackSchema);
