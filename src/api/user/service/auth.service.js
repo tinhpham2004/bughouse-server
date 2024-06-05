@@ -423,7 +423,7 @@ class AuthService {
     user.address.street = address_entities?.street?.toLowerCase() || "";
     user.auth.isAuthorize = true;
     // Add user avatar
-    user.avatar = `https://ui-avatars.com/api/?background=7A7878&color=E5A500&name=${name.split(" ").join("+")}`;
+    user.avatar = `https://api.multiavatar.com/${userId}.png`;
     await user.save();
 
     const payload = {
