@@ -457,12 +457,12 @@ class AuthService {
       userService.transferBalance(
         ADMIN._id,
         userId,
-        10000,
+        1000000,
         ACTION_TRANSFER.CLAIM
       ),
       userWalletService.changeBalance(
         userId,
-        10000,
+        1000000,
         null,
         // eslint-disable-next-line comma-dangle
         USER_TRANSACTION_ACTION.CLAIM
@@ -471,7 +471,7 @@ class AuthService {
         userOwner: ADMIN._id,
         tag: [userId],
         type: "NOTIFICATION",
-        content: "bạn nhận được: 10000 từ BUGHOUSE",
+        content: "bạn nhận được: 1000000 từ BUGHOUSE",
       }),
     ]);
 
