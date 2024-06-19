@@ -17,7 +17,8 @@ const userValidate = {
   validateEmail: (email) => {
     if (!email) return false;
 
-    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regex.test(String(email).toLowerCase());
   },
   validatePhone: (phone) => {
@@ -27,8 +28,10 @@ const userValidate = {
     return regex.test(phone);
   },
 
-  validateUsername (username) {
-    if (!username) { return false; }
+  validateUsername(username) {
+    if (!username) {
+      return false;
+    }
     return true;
   },
   // not empty, minimun 8
@@ -60,6 +63,29 @@ const userValidate = {
 
     return true;
   },
+  // validateDateOfBirth: (date) => {
+  //   if (!date) return false;
+
+  //   const { day, month, year } = date;
+
+  //   if (!day || !month || !year) return false;
+
+  //   if (year < 1900) return false;
+
+  //   // reformat date
+  //   const dateTempt = new Date(
+  //     `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
+  //   );
+  //   if (dateTempt.toDateString() === "Invalid Date") return false;
+
+  //   // ages of user more than 18
+  //   const fullyear = dateTempt.getFullYear();
+  //   dateTempt.setFullYear(fullyear + 18);
+
+  //   if (dateTempt > new Date()) return false;
+
+  //   return true;
+  // },
   // must be int and have 6 digit
   validateOTP: (otp) => {
     if (!otp) return false;
@@ -69,43 +95,65 @@ const userValidate = {
   },
 
   validateLogin: (username, password) => {
-    if (!(this.validateEmail(username) || this.validateUsername(username) || this.validatePhone(username)) || !this.validatePassword(password)) throw new MyError("Info Login invalid");
+    if (
+      !(
+        this.validateEmail(username) ||
+        this.validateUsername(username) ||
+        this.validatePhone(username)
+      ) ||
+      !this.validatePassword(password)
+    ) {
+      throw new MyError("Info Login invalid");
+    }
   },
 
   // validate username and otp to corfirm account
-  validateConfirmAccount (username, otpPhone) {
-    if (!this.validateUsername(username) || !this.validateOTP(otpPhone)) { throw new MyError("Info confirm account invalid"); }
+  validateConfirmAccount(username, otpPhone) {
+    if (!this.validateUsername(username) || !this.validateOTP(otpPhone)) {
+      throw new MyError("Info confirm account invalid");
+    }
   },
 
-  validateResetPassword (username, otpPhone, password) {
+  validateResetPassword(username, otpPhone, password) {
     if (
       !this.validateUsername(username) ||
       !this.validateOTP(otpPhone) ||
       !this.validatePassword(password)
-    ) { throw new Error("Info reset password invalid"); }
+    ) {
+      throw new Error("Info reset password invalid");
+    }
   },
 
-  validatePhonesList (phones) {
-    if (!phones || !Array.isArray(phones)) { throw new MyError("Phones invalid"); }
+  validatePhonesList(phones) {
+    if (!phones || !Array.isArray(phones)) {
+      throw new MyError("Phones invalid");
+    }
 
     phones.forEach((phoneEle) => {
       const { phone, name } = phoneEle;
-      if (!name || !phone || !this.validatePhone(phone)) { throw new MyError("Phones invalid"); }
+      if (!name || !phone || !this.validatePhone(phone)) {
+        throw new MyError("Phones invalid");
+      }
     });
   },
 
-  async checkRegistryInfo (userInfo) {
-    const {
-      username, password, contactInfo, email,
-    } = userInfo;
+  async checkRegistryInfo(userInfo) {
+    const { username, password, contactInfo, email } = userInfo;
     const error = {};
 
     // check validate username
     if (!this.validateUsername(username)) error.username = USERNAME_INVALID;
-    else if (await User.findOne({ username })) { error.username = USERNAME_EXISTS_INVALID; }
+    else if (await User.findOne({ username })) {
+      error.username = USERNAME_EXISTS_INVALID;
+    }
 
     // check contact info email or phone
-    if (!contactInfo || !(this.validateEmail(email) || this.validatePhone(contactInfo))) error.contact = CONTACT_INVALID;
+    if (
+      !contactInfo ||
+      !(this.validateEmail(email) || this.validatePhone(contactInfo))
+    ) {
+      error.contact = CONTACT_INVALID;
+    }
 
     // else if (await User.findOne({
     //     $or: [{ email: contactInfo }, { phone: contactInfo }]
@@ -118,7 +166,11 @@ const userValidate = {
     if (!isEmpty(error)) error.toString();
 
     return {
-      username, password, contactInfo, error, email,
+      username,
+      password,
+      contactInfo,
+      error,
+      email,
     };
   },
 
@@ -127,14 +179,23 @@ const userValidate = {
 
     const error = {};
 
-    if (!name || !NAME_REGEX.test(name)) { error.name = NAME_INVALID; }
+    if (!name || !NAME_REGEX.test(name)) {
+      error.name = NAME_INVALID;
+    }
 
-    if (!(gender === "Orther" || gender === "Female" || gender === "Man")) { error.gender = GENDER_INVALID; }
+    if (!(gender === "Other" || gender === "Female" || gender === "Man")) {
+      error.gender = GENDER_INVALID;
+    }
 
-    if (!dob) { error.dob = DATE_INVALID; }
+    if (!dob) {
+      error.dob = DATE_INVALID;
+    }
 
     if (commonHelper.isEmpty(error)) {
-      console.log("🚀 ~ file: user.validation.js:147 ~ validateProfile: ~ error", error);
+      console.log(
+        "🚀 ~ file: user.validation.js:147 ~ validateProfile: ~ error",
+        error
+      );
       return false;
     }
     return {

@@ -107,7 +107,7 @@ class AuthService {
         $or: [{ username }, { email: username }, { phone: username }],
       })
         .select(
-          "_id otp username name email phone auth avatar wallet wishList address dob createdAt gender identity",
+          "_id otp username name email phone auth avatar wallet wishList address dob createdAt gender identity"
         )
         .lean();
 
@@ -293,7 +293,7 @@ class AuthService {
       //   const { phone } = user;
       console.log(
         "🚀 ~ file: auth.service.js:266 ~ AuthService ~ resetOTP ~ email:",
-        email,
+        email
       );
 
       // send otp
@@ -380,7 +380,7 @@ class AuthService {
             await user.save();
           }
         }
-      },
+      }
     );
   }
 
@@ -410,10 +410,14 @@ class AuthService {
     // eslint-disable-next-line no-unused-vars
     const { name, dob, sex, id, identityImg, home, address_entities } =
       userInfo;
+    // Convert dob to date
+    // Convert dob to date
+    const dobParts = dob.split("/");
+    const dobDate = new Date(`${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`);
     const user = await User.findOne({ _id: userId });
     user.name = name;
     user.gender = sex === "N/A" ? "Other" : sex;
-    user.dob = dob;
+    user.dob = dobDate;
     user.identity = id;
     user.identityImg = identityImg?.length !== 0 ? identityImg : [];
     user.address = {};
@@ -454,14 +458,14 @@ class AuthService {
         ADMIN._id,
         userId,
         10000,
-        ACTION_TRANSFER.CLAIM,
+        ACTION_TRANSFER.CLAIM
       ),
       userWalletService.changeBalance(
         userId,
         10000,
         null,
         // eslint-disable-next-line comma-dangle
-        USER_TRANSACTION_ACTION.CLAIM,
+        USER_TRANSACTION_ACTION.CLAIM
       ),
       Notification.create({
         userOwner: ADMIN._id,
