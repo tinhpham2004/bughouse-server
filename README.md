@@ -12,7 +12,7 @@ npm (version 6 or later)
 Clone the repository to your local machine:
 
 ```
-git clone https://github.com/canhcutcon/bughouse-server.git
+git clone https://github.com/crazyads69/bughouse-server.git
 
 ```
 
